@@ -14,7 +14,7 @@
 		/*----Id register ----*/
 		sprd,lcd-id-register = [DA];
 		sprd,lcd-id-value-len = <2>;
-		sprd,lcd-id-value = [21 8311];
+		sprd,lcd-id-value = [21 83];
 		sprd,lcd-id-tokernel = <0xf0>;
 
 		/*---Bias Power---*/
