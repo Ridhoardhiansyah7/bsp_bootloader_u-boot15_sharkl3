@@ -2073,15 +2073,19 @@ int _boot_load_kernel_ramdisk_image(char *bootmode, boot_img_hdr * hdr, uchar **
 	uint32_t bootconfig_checksum_v4 = 0;
 	uint8_t bootconfig_gap = 0;
 
+	lcd_cursor_bottom_left_margin();
+
 	if (0 == memcmp(bootmode, RECOVERY_PART, strlen(RECOVERY_PART))) {
 #ifdef CONFIG_ANDROID_AB
 		partition = "boot";
 #else
 		partition = "recovery";
 #endif
+		lcd_printf("> recovery mode");
 		debugf("enter recovery mode!\n");
 	} else {
 		partition = "boot";
+		lcd_printf("> booting android os");
 		debugf("enter boot mode!\n");
 	}
 
