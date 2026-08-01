@@ -245,6 +245,12 @@ void lcd_printf(const char *fmt, ...)
 	lcd_puts(buf);
 }
 
+void lcd_cursor_mid_left(void) {
+	int total_rows = lcd_get_screen_rows();
+	int center_y = total_rows / 2;
+	lcd_position_cursor(0, center_y);
+}
+
 static int do_lcd_setcursor(cmd_tbl_t *cmdtp, int flag, int argc,
 			    char *const argv[])
 {
