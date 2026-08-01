@@ -6,25 +6,25 @@
 		sprd,dsi-color-format = "rgb888";
 
 		sprd,phy-bit-clock = <660000>;	/* kbps */
-		sprd,phy-escape-clock = <20000>;/* kHz */
+		sprd,phy-escape-clock = <5>;/* kHz */
 
 		/* panel interface type: 2:MIPI; 3:SPI */
 		sprd,panel-if-type = <2>;
 
 		/*----Id register ----*/
-		sprd,lcd-id-register = [DA DB DC];
-		sprd,lcd-id-value-len = <1 1 1>;
-		sprd,lcd-id-value = [00 00 00];
+		sprd,lcd-id-register = [DA];
+		sprd,lcd-id-value-len = <2>;
+		sprd,lcd-id-value = [21 8311];
 		sprd,lcd-id-tokernel = <0xf0>;
 
 		/*---Bias Power---*/
 		sprd,power-i2c-bus = <4>;
 		sprd,power-i2c-addr = <0x3E>;
-		sprd,power-i2c-speed = <100000>;
-		sprd,power-i2c-reg = [00 01];
-		sprd,power-i2c-val = [12 12];
+		sprd,power-i2c-speed = <400000>;
+		sprd,power-i2c-reg = [00 01 03 FF];
+		sprd,power-i2c-val = [14 14 33 80];
 
-		sprd,reset-on-sequence = <1 50>, <0 50>, <1 150>;
+		sprd,reset-on-sequence = <1 5>, <0 5>, <1 40>;
 		sprd,reset-off-sequence = <0 5>;
 
 		sprd,use-dcs-write;
@@ -150,8 +150,8 @@
 		sprd,sleep-in-command = [
 			15 5A 00 01 28
 			15 5F 00 01 10
-      29 00 00 02 17 5A
-      29 14 00 02 18 5A
+			29 00 00 02 17 5A
+			29 14 00 02 18 5A
 		];
 
 		sprd,sleep-out-command = [
