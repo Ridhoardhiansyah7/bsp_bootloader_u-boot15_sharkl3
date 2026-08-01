@@ -368,7 +368,7 @@ int _fb_write_nv_img(char * partition_name, uint64_t size)
 	return 1;
 }
 
-int is_f2fs_filesystem(uchar *part_name)
+/*int is_f2fs_filesystem(uchar *part_name)
 {
 #if 1
 	__le32 f2fs_magic = 0;
@@ -396,6 +396,7 @@ int f2fs_read_callback(void* handle, uint64_t size, uint64_t offset, void *buf)
 	}
 	return 0;
 }
+*/
 
 int _fb_download_image(char *partition_name,ulong offset)
 {
