@@ -251,6 +251,12 @@ void lcd_cursor_mid_left(void) {
 	lcd_position_cursor(0, center_y);
 }
 
+void lcd_cursor_bottom_left_margin(void) {
+	int total_rows = lcd_get_screen_rows();
+	int bottom_y = total_rows - 2; 
+	lcd_position_cursor(0, bottom_y);
+}
+
 static int do_lcd_setcursor(cmd_tbl_t *cmdtp, int flag, int argc,
 			    char *const argv[])
 {
