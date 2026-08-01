@@ -39,7 +39,7 @@ static uint32_t rtc_domain_reg_read(void)
 void rtc_domain_reg_read_fastcmd(int value)
 {
 	if(value == 1)
-	rtc_domain_reg_write(HWRST_RTCSTATUS_USB_FAST_BOOT);
+	rtc_domain_reg_write(HWRST_RTCSTATUS_DOWNLOAD_BOOT);
 	if(value == 0)
 	rtc_domain_reg_write(HWRST_RTCSTATUS_DEFAULT);	
 }
@@ -96,7 +96,7 @@ unsigned check_reboot_mode(void)
 			return CMD_NORMAL_MODE;
 		}
 	}
-	if(HWRST_RTCSTATUS_USB_FAST_BOOT == rtc_domain_reg_read() && rst_mode == 0) {
+	if(HWRST_RTCSTATUS_DOWNLOAD_BOOT == rtc_domain_reg_read() && rst_mode == 0) {
 		debugf("FAST_BOOT rtc_domain_reg get reboot normal mode \n");
 		ANA_REG_SET(ANA_REG_GLB_POR_RST_MONITOR, 0); //clear flag
 		return CMD_NORMAL_MODE;
