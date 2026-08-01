@@ -29,11 +29,11 @@ on:
       board_name:
         description: 'Board Name or Defconfig (eg: sp9863a_1h10 . note without _defconfig)'
         required: true
-        default: 'sp9863a_1h10'
+        default: 'sp9863a_1h10_go'
         type: string
       device_tree:
         description: 'Device Tree (eg: sp9863a_1h10 . note without ext like .dts/.dtsi)'
-        default: 'sp9863a_1h10'
+        default: 'sp9863a_1h10_go'
         required: true
         type: string
 
@@ -228,7 +228,7 @@ jobs:
       - name: Filter Root Files from Out Directory
         run: |
           mkdir -p out_flat
-          find out/ -maxdepth 1 -type f -not -name "Makefile" -exec cp {} out_flat/ \;
+          find out/ -maxdepth 1 -type f -not -name "Makefile" -not -name "u-boot" -not -name "u-boot_autopoweron" -exec cp {} out_flat/ \;
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
