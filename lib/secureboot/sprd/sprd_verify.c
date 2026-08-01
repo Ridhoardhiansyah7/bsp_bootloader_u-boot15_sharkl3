@@ -862,6 +862,25 @@ ubootkey_from
 0:from ram
 1:from emmc
 */
+void sprd_get_vboot_key(uint8_t * load_buf, uint8_t *key, uint32_t ubootkey_from)
+{
+    // Hardcode from uboot_log
+    uint8_t stock_vboot_key[32] = {
+        0x0c, 0x38, 0x21, 0x36, 0xf0, 0x1e, 0x2f, 0x94,
+        0x69, 0xd6, 0x3b, 0x35, 0x9d, 0x88, 0xcb, 0x36,
+        0xd5, 0x2b, 0x7c, 0xfb, 0xd7, 0x74, 0x93, 0x6e,
+        0x6d, 0x80, 0xaf, 0x88, 0xd0, 0xe3, 0xed, 0x31
+    };
+
+    sec_memcpy(key, stock_vboot_key, sizeof(stock_vboot_key));
+    secf("Using hardcoded stock vboot key for custom build.\n");
+    return;
+}
+/*
+ubootkey_from
+0:from ram
+1:from emmc
+
 void sprd_get_vboot_key(uint8_t * load_buf,uint8_t *key,uint32_t ubootkey_from)
 {
 	uint8_t vboot_signed_part[4096];
@@ -940,6 +959,7 @@ void sprd_get_vboot_key(uint8_t * load_buf,uint8_t *key,uint32_t ubootkey_from)
 		sec_memcpy(key, vboot_cert->hash_key, SPRD_RSA4096PUBK_HASHLEN);
 	}
 }
+*/
 #endif
 
 void sprd_get_pubk(uint8_t *load_buf,uint8_t *pubk, int sprd_keycert_ver)
