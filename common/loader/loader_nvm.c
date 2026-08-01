@@ -1640,7 +1640,7 @@ error:
 	if (!hit_cnt) {
 		int key_code;
 
-		lcd_printf("Merge dtbo fail, press key to reboot into fastboot\n");
+		lcd_printf("Merge dtbo fail, press key to reboot into fastboot\n\n");
 		do {
 			udelay(50 * 1000);
 			key_code = board_key_scan();
@@ -2481,7 +2481,7 @@ int loader_binding_data_set(void)
 	if(lcd_low_bat == 1 ||((cmd_fastboot ==1)&&(low_bat==1)))  
 	{
 		debugf("lcd_low_bat is ture\n");
-		lcd_printf("can't enter fastboot when power is < 30%!!!, rebooting\n");
+		lcd_printf("can't enter fastboot when power is < 30%!!!, rebooting\n\n");
 		//lcd_printf("The battery capacity is less than 30%, forbit enter fastboot mode!!!\n");
 	}		
 	/*set device state*/
@@ -2491,7 +2491,7 @@ int loader_binding_data_set(void)
 		debugf("Info: Bootloader is LOCKED!!!\n");
 	}else if(g_DeviceStatus == VBOOT_STATUS_UNLOCK){
 		debugf("Info: Bootloader is UNLOCKED!!!\n");
-		lcd_printf("Info: Bootloader is UNLOCKED!!!\n");
+		lcd_printf("Info: Bootloader is UNLOCKED!!!\n\n");
 	}
 
 	return 0;
@@ -2557,6 +2557,7 @@ int take_action_with_vbootret(void)
 	switch(g_verifiedbootstate) {
 		case v_state_red:
 			debugf("WARNNING: Oem Key & User Key Verify Failed!!!\n");
+			lcd_printf("Current State: RED state\n\n");
 			display_state_verified_red();
 /*
 			while(sec_time_count) {
@@ -2596,7 +2597,7 @@ int take_action_with_vbootret(void)
 
 		case v_state_orange:
 			debugf("WARNNING: LOCK FLAG IS : UNLOCK, SKIP VERIFY!!!\n");
-			lcd_printf("Current State: Orange state\n");
+			lcd_printf("Current State: Orange state\n\n");
             display_state_verified_orange();
 			break;
 
