@@ -12,7 +12,7 @@
 		sprd,panel-if-type = <2>;
 
 		/*----Id register ----*/
-		sprd,lcd-id-register = [00];
+		sprd,lcd-id-register = [31];
 		sprd,lcd-id-value-len = <1>;
 		sprd,lcd-id-value = [21];
 		sprd,lcd-id-tokernel = <0xf0>;
