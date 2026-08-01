@@ -306,6 +306,7 @@
 #define PWR_KEY_DETECT_CNT  2
 #define ALARM_LEAD_SET_MS 0 /* time set for alarm boot in advancd */
 #define LOW_BAT_VOL            3400 /*phone battery voltage low than this value will not boot up*/
+#define LOW_BAT_VOL_CHG 	   3300 //3.3V charger connect
 #define MISCDATA_ADDRESS_BASE		(10 * 1024 + 256)
 #define MISCDATA_MAGIC_OFFSET		0
 #define MISCDATA_MAGIC_SIZE		4
