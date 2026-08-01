@@ -2475,20 +2475,23 @@ void vlx_nand_boot_zebu(char *kernel_pname, int backlight_set, int lcd_enable)
 #ifdef CONFIG_SECBOOT
 int loader_binding_data_set(void)
 {
+
+	lcd_cursor_mid_left();
+	
 	if(lcd_low_bat == 1 ||((cmd_fastboot ==1)&&(low_bat==1)))  
 	{
 		debugf("lcd_low_bat is ture\n");
-		lcd_printf("can't enter fastboot when power is < 30%!!!\n");
+		lcd_printf("can't enter fastboot when power is < 30%!!!, rebooting\n");
 		//lcd_printf("The battery capacity is less than 30%, forbit enter fastboot mode!!!\n");
 	}		
 	/*set device state*/
 	get_lock_status();
 
 	if(g_DeviceStatus == VBOOT_STATUS_LOCK){
-		debugf("Info: Bootloader is : LOCKED!!!\n");
+		debugf("Info: Bootloader is LOCKED!!!\n");
 	}else if(g_DeviceStatus == VBOOT_STATUS_UNLOCK){
-		debugf("Info: Bootloader is : UNLOCKED!!!\n");
-		lcd_printf("Info: Bootloader is : UNLOCKED!!!\n");
+		debugf("Info: Bootloader is UNLOCKED!!!\n");
+		lcd_printf("Info: Bootloader is UNLOCKED!!!\n");
 	}
 
 	return 0;
@@ -2593,7 +2596,7 @@ int take_action_with_vbootret(void)
 
 		case v_state_orange:
 			debugf("WARNNING: LOCK FLAG IS : UNLOCK, SKIP VERIFY!!!\n");
-			//lcd_printf("WARNNING: LOCK FLAG IS : UNLOCK, SKIP VERIFY!!!\n");
+			lcd_printf("Current State: Orange state\n");
             display_state_verified_orange();
 			break;
 
