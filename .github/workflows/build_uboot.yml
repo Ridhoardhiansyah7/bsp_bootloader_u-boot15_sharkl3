@@ -167,9 +167,13 @@ jobs:
           cp common/nvmerge.h include/nvmerge.h
 
           # Build flags
-          export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
+          #export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
+          #export HOSTCFLAGS="-std=gnu99 -w"
+          #export EXTRA_CFLAGS="-std=gnu99 -w -I$(pwd)/include"
+
+          export KCFLAGS="-std=gnu99 -w -I$(pwd)/include -DHWRST_RTCSTATUS_USB_FAST_BOOT=0x2 -DLOW_BAT_VOL_CHG=3600"
           export HOSTCFLAGS="-std=gnu99 -w"
-          export EXTRA_CFLAGS="-std=gnu99 -w -I$(pwd)/include"
+          export EXTRA_CFLAGS="-std=gnu99 -w -I$(pwd)/include -DHWRST_RTCSTATUS_USB_FAST_BOOT=0x2 -DLOW_BAT_VOL_CHG=3600"
 
           # Build path,target, dtb & toolchain
           export BSP_UBOOT_OUT=$(pwd)/out
