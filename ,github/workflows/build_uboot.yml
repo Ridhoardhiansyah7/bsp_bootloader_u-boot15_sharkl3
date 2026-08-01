@@ -1,0 +1,181 @@
+name: Build Android U-Boot
+
+on:
+  workflow_dispatch:
+    inputs:
+      using_BspUBoot_to_build_bootloader:
+        description: 'Is using BspUBoot to build uboot or using default make.sh'
+        required: true
+        default: true
+        type: boolean
+      arch:
+        description: 'Target Build Arch (arm, arm64, x86)'
+        required: true
+        default: 'arm64'
+        type: choice
+        options:
+          - arm
+          - arm64
+          - x86
+      build_variant:
+        description: 'Target Build variant (user, userdebug, eng)'
+        required: true
+        default: 'userdebug'
+        type: choice
+        options:
+          - user
+          - userdebug
+          - eng
+      board_name:
+        description: 'Board Name or Defconfig (eg: sp9863a_1h10 . note without _defconfig)'
+        required: true
+        default: 'sp9863a_1h10'
+        type: string
+      device_tree:
+        description: 'Device Tree (eg: sp9863a_1h10 . note without ext like .dts/.dtsi)'
+        default: 'sp9863a_1h10'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Environment & Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev bison flex bc git wget gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu
+
+      - name: Setup Toolchain Path Symlink
+        run: |
+          TARGET_DIR="../prebuilts/gcc/linaro-x86/aarch64/gcc-linaro-4.8-2015.06-x86_64_aarch64-linux-gnu/bin"
+          mkdir -p "$TARGET_DIR"
+          
+          ln -s /usr/bin/aarch64-linux-gnu-gcc-9 "$TARGET_DIR/aarch64-linux-gnu-gcc"
+          ln -s /usr/bin/aarch64-linux-gnu-ld-9 "$TARGET_DIR/aarch64-linux-gnu-ld"
+          ln -s /usr/bin/aarch64-linux-gnu-as-9 "$TARGET_DIR/aarch64-linux-gnu-as"
+          ln -s /usr/bin/aarch64-linux-gnu-objcopy-9 "$TARGET_DIR/aarch64-linux-gnu-objcopy"
+          ln -s /usr/bin/aarch64-linux-gnu-cpp-9 "$TARGET_DIR/aarch64-linux-gnu-cpp"
+
+      - name: Create GCC System Symlinks
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+          
+          # Buat symlink dari compiler versi 9 ke nama standar tanpa akhiran -9
+          ln -s /usr/bin/aarch64-linux-gnu-gcc-9 $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-gcc
+          ln -s /usr/bin/aarch64-linux-gnu-g++-9 $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-g++
+          ln -s /usr/bin/aarch64-linux-gnu-cpp-9 $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-cpp
+          ln -s /usr/bin/aarch64-linux-gnu-ld-9  $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-ld
+          ln -s /usr/bin/aarch64-linux-gnu-as-9  $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-as
+          ln -s /usr/bin/aarch64-linux-gnu-ar-9  $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-ar
+          ln -s /usr/bin/aarch64-linux-gnu-objcopy-9 $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-objcopy
+          ln -s /usr/bin/aarch64-linux-gnu-objdump-9 $GITHUB_WORKSPACE/bin/aarch64-linux-gnu-objdump
+
+      - name: Fix GCC 9 Header for U-Boot
+        run: |
+          cd include/linux
+          
+          if [ ! -f compiler-gcc9.h ]; then
+            if [ -f compiler-gcc5.h ]; then
+              cp compiler-gcc5.h compiler-gcc9.h
+            elif [ -f compiler-gcc6.h ]; then
+              cp compiler-gcc6.h compiler-gcc9.h
+            elif [ -f compiler-gcc4.h ]; then
+              cp compiler-gcc4.h compiler-gcc9.h
+            fi
+            echo "Successfully created compiler-gcc9.h fallback!"
+          fi
+
+      - name: Set C99 Standard Flag for GCC 9
+        run: |
+          echo "KBUILD_CFLAGS=-std=gnu99" >> $GITHUB_ENV
+          echo "HOSTCFLAGS=-std=gnu99" >> $GITHUB_ENV
+
+      - name: Convert All C++ Comments to Standard C Comments
+        run: |
+          find include/configs/ -type f -name "*.h" -exec sed -i 's|//\(.*\)|/\* \1 \*/|g' {} +
+
+      - name: Make Executable
+        run: chmod +x make.sh
+
+      - name: Build U-Boot
+        run: |
+
+          # Dummy file
+          mkdir -p include/soc/sprd
+          touch include/soc/sprd/board.h
+          mkdir -p kernel/kernel4.14/include/soc/sprd
+          cp include/soc/sprd/board.h kernel/kernel4.14/include/soc/sprd/board.h
+
+          # Build flags
+          export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
+          export HOSTCFLAGS="-std=gnu99 -w"
+          export EXTRA_CFLAGS="-std=gnu99 -w -I$(pwd)/include"
+
+          # Build path,target, dtb & toolchain
+          export BSP_UBOOT_OUT=$(pwd)/out
+          export BSP_UBOOT_DIST=$(pwd)/out
+          export BSP_UBOOT_DEFCONFIG=${{ github.event.inputs.board_name }}
+          export BSP_UBOOT_TARGET_DTB=${{ github.event.inputs.device_tree }}
+          export BSP_UBOOT_TOOLCHAIN=aarch64-linux-gnu-
+
+          # Sharl3 config
+          # General
+          export BSP_BOARD_ARCH=${{ github.event.inputs.arch }}
+          export TARGET_BUILD_VARIANT=${{ github.event.inputs.build_variant }}
+          export PLATFORM_VERSION=11
+
+          # A/B & V-A/B
+          export BSP_PRODUCT_USE_DYNAMIC_PARTITIONS=true
+
+          # VerifiedBoot & SecureBoot
+          export BSP_PRODUCT_VBOOT=V2
+          export PRODUCT_DMVERITY_DISABLE=false
+          export BSP_PRODUCT_SECURE_BOOT=SPRD
+          export BSP_BOARD_TEE_CONFIG=trusty
+          export BSP_BOARD_TEECFG_CUSTOM=true
+
+          # Cali
+          export BSP_CALIMODE_USE_BOOTIMG=true
+
+          # Kernel cmdline
+          export CONFIG_BOARD_KERNEL_CMDLINE=false
+
+          # PcTool
+          export CONFIG_PCTOOL_CHECK_MULTI_FIXNV=false
+          export CONFIG_PCTOOL_CHECK_WRITE_PROTECT=false
+
+          # Others
+          #export BSP_PKCS1_PSS_FLAG=true
+          #export BSP_PROJECT_SEC_CM4_FLAG=true
+          #export CONFIG_CHIP_UID=false
+          #export BSP_CONFIG_TEE_FIREWALL=false
+          #export BSP_BOARD_ATF_CONFIG=false
+
+          # start build
+          if [ "${{ github.event.inputs.using_BspUBoot_to_build_bootloader }}" = "true" ]; then
+            bash ./make.sh bsp
+          else
+            bash ./make.sh ${{ github.event.inputs.arch }} ${{ github.event.inputs.board_name }} ${{ github.event.inputs.device_tree }}
+          fi
+          
+        shell: bash
+
+      - name: Filter Root Files from Out Directory
+        run: |
+          mkdir -p out_flat
+          find out/ -maxdepth 1 -type f -not -name "Makefile" -exec cp {} out_flat/ \;
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: uboot-output-${{ github.event.inputs.board_name }}
+          path: |
+            out_flat/*
+            *.bin
+            *.img
