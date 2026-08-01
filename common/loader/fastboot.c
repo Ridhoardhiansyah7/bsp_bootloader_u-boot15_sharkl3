@@ -368,7 +368,7 @@ int _fb_write_nv_img(char * partition_name, uint64_t size)
 	return 1;
 }
 
-static int is_f2fs_filesystem(uchar *part_name)
+int is_f2fs_filesystem(uchar *part_name)
 {
 #if 1
 	__le32 f2fs_magic = 0;
@@ -382,14 +382,14 @@ static int is_f2fs_filesystem(uchar *part_name)
 #endif
 	return 0;
 }
-static int f2fs_write_callback(void* handle, uint64_t size, uint64_t offset, void *buf)
+int f2fs_write_callback(void* handle, uint64_t size, uint64_t offset, void *buf)
 {
 	if (0 != common_raw_write((char*)handle, size, (uint64_t)0, offset,  buf)) {
 		return -1;
 	}
 	return 0;
 }
-static int f2fs_read_callback(void* handle, uint64_t size, uint64_t offset, void *buf)
+int f2fs_read_callback(void* handle, uint64_t size, uint64_t offset, void *buf)
 {
 	if (0 != common_raw_read((char*)handle, size, offset, buf)) {
 		return -1;
@@ -473,7 +473,8 @@ int _fb_download_image(char *partition_name,ulong offset)
 					f2fs_read_callback,
 					(void*)partition_name,
 					ImageInfo.base_address,
-					ImageInfo.max_size);
+					ImageInfo.max_size,
+					total_size);
 			if (retval==0) {
 				debugf("resize userdata ok\n");
 			} else {
