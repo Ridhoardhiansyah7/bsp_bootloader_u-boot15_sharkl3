@@ -228,7 +228,7 @@ jobs:
       - name: Filter Root Files from Out Directory
         run: |
           mkdir -p out_flat
-          find out/ -maxdepth 1 -type f -not -name "Makefile" -not -name "u-boot" -not -name "u-boot_autopoweron" -exec cp {} out_flat/ \;
+          find out/ -maxdepth 1 -type f -not -name "Makefile" -not -name "u-boot" -not -name "u-boot_autopoweron" -not -name "u-boot.srec" -exec cp {} out_flat/ \;
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
