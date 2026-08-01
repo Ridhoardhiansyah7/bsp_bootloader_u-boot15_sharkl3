@@ -1,31 +1,30 @@
 / { lcds {
 	lcd_ft8006s_boe_mipi_hd: lcd_ft8006s_boe_mipi_hd {
 
-		sprd,dsi-work-mode = <1>; /* video burst mode*/
-		sprd,dsi-lane-number = <4>;
+		sprd,dsi-work-mode = <0x01>; /* video burst mode*/
+		sprd,dsi-lane-number = <0x04>;
 		sprd,dsi-color-format = "rgb888";
 
-		sprd,phy-bit-clock = <660000>;	/* kbps */
-		sprd,phy-escape-clock = <5>;/* kHz */
+		sprd,phy-bit-clock = <0xa1220>;	/* kbps */
 
 		/* panel interface type: 2:MIPI; 3:SPI */
 		sprd,panel-if-type = <2>;
 
 		/*----Id register ----*/
-		sprd,lcd-id-register = [DA];
-		sprd,lcd-id-value-len = <0>;
-		sprd,lcd-id-value = [00];
-		sprd,lcd-id-tokernel = <0xf0>;
+		sprd,lcd-id-register = [da];
+		sprd,lcd-id-value-len = <0x01>;
+		sprd,lcd-id-value = [21];
+		sprd,lcd-id-tokernel = <0x8311>;
 
 		/*---Bias Power---*/
-		sprd,power-i2c-bus = <4>;
-		sprd,power-i2c-addr = <0x3E>;
-		sprd,power-i2c-speed = <400000>;
-		sprd,power-i2c-reg = [00 01 03 FF];
-		sprd,power-i2c-val = [14 14 33 80];
+		sprd,power-i2c-bus = <0x04>;
+		sprd,power-i2c-addr = <0x3e>;
+		sprd,power-i2c-speed = <0x61a80>;
+		sprd,power-i2c-reg = <0x103ff>;
+		sprd,power-i2c-val = <0x14143380>;
 
-		sprd,reset-on-sequence = <1 5>, <0 5>, <1 40>;
-		sprd,reset-off-sequence = <0 5>;
+		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x28>;
+		sprd,reset-off-sequence = <0x01 0x05>;
 
 		sprd,use-dcs-write;
 
@@ -147,29 +146,20 @@
 					
 		];
 
-		sprd,sleep-in-command = [
-			15 5A 00 01 28
-			15 5F 00 01 10
-			29 00 00 02 17 5A
-			29 14 00 02 18 5A
-		];
-
-		sprd,sleep-out-command = [
-			15 78 00 01 11
-			15 14 00 01 29
-		];
+		sprd,sleep-in-command = [15 5a 00 01 28 15 5f 00 01 10 29 00 00 02 17 5a 29 14 00 02 18 5a];
+		sprd,sleep-out-command = [15 78 00 01 11 15 32 00 01 29];
 
 		display-timings {
 			ft8006s_boe_timing0: timing0 {
-				clock-frequency = <96000000>;
-				hactive = <720>;
-				vactive = <1600>;
-				hback-porch = <68>;
-				hfront-porch = <55>;
-				vback-porch = <110>;
-				vfront-porch = <140>;
-				hsync-len = <14>;
-				vsync-len = <8>;
+				clock-frequency = <0x5b8d800>;
+				hactive = <0x2d0>;
+				vactive = <0x640>;
+				hback-porch = <0x44>;
+				hfront-porch = <0x37>;
+				vback-porch = <0x6e>;
+				vfront-porch = <0x8c>;
+				hsync-len = <0x0e>;
+				vsync-len = <0x08>;
 			};
 		};
 	};
