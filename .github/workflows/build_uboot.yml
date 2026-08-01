@@ -119,6 +119,9 @@ jobs:
           avb_version_system := 1
           EOF
 
+          mkdir -p ../../../vendor/hmd/
+          touch ../../../vendor/hmd/version.mk
+
           # Build flags
           export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
           export HOSTCFLAGS="-std=gnu99 -w"
@@ -134,6 +137,7 @@ jobs:
           # Sharl3 config
           # General
           export BSP_BOARD_ARCH=${{ github.event.inputs.arch }}
+          export TARGET_PRODUCT=${{ github.event.inputs.board_name }}
           export TARGET_BUILD_VARIANT=${{ github.event.inputs.build_variant }}
           export PLATFORM_VERSION=11
 
