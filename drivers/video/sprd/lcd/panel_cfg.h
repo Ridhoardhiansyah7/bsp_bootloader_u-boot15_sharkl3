@@ -16,6 +16,7 @@
 extern struct panel_driver ft8006p_easyquick_driver;
 extern struct panel_driver ft8006p_hlt_driver;
 extern struct panel_driver ft8006p_huaxian_driver;
+extern struct panel_driver ft8006s_boe_mipi_hd_driver;
 extern struct panel_driver dummy_mipi_driver;
 extern struct panel_driver icnl9911_hlt_driver;
 extern struct panel_driver icnl9911_txd_driver;
@@ -54,6 +55,12 @@ static struct panel_cfg supported_panel[] = {
 	{
 		.lcd_id = 0xe0,
 		.drv = &ft8006p_huaxian_driver,
+	},
+#endif
+#ifdef CONFIG_LCD_FT8006S_BOE_MIPI_HD
+	{
+		.lcd_id = 0x8311,
+		.drv = &ft8006s_boe_mipi_hd_driver,
 	},
 #endif
 #ifdef CONFIG_LCD_ICNL9911_HLT_MIPI_HDP
