@@ -2,6 +2,7 @@ obj-y += lcd_dummy_mipi_hd.o
 obj-$(CONFIG_LCD_FT8006P_EASYQUICK_MIPI_HDP) += lcd_ft8006p_easyquick_mipi_hdp.o
 obj-$(CONFIG_LCD_FT8006P_HLT_MIPI_HDP) += lcd_ft8006p_hlt_mipi_hdp.o
 obj-$(CONFIG_LCD_FT8006P_HUAXIAN_MIPI_HDP) += lcd_ft8006p_huaxian_mipi_hdp.o
+obj-$(CONFIG_LCD_FT8006S_BOE_MIPI_HD) += lcd_ft8006s_boe_mipi_hd.o
 obj-$(CONFIG_LCD_ICNL9911_HLT_MIPI_HDP) += lcd_icnl9911_hlt_mipi_hdp.o
 obj-$(CONFIG_LCD_ICNL9911_TXD_MIPI_HDP) += lcd_icnl9911_txd_mipi_hdp.o
 obj-$(CONFIG_LCD_ILI9881C_TRULY_MIPI_HD) += lcd_ili9881c_truly_mipi_hd.o
