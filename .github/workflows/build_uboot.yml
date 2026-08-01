@@ -112,6 +112,13 @@ jobs:
           mkdir -p kernel/kernel4.14/include/soc/sprd
           cp include/soc/sprd/board.h kernel/kernel4.14/include/soc/sprd/board.h
 
+          mkdir -p ../../tools/secureboot_key/config
+          cat <<EOF > ../../tools/secureboot_key/config/version.cfg
+          trusted_version := 1
+          avb_version_vbmeta := 1
+          avb_version_system := 1
+          EOF
+
           # Build flags
           export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
           export HOSTCFLAGS="-std=gnu99 -w"
