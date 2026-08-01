@@ -125,6 +125,47 @@ jobs:
           mkdir -p ../../../vendor/hmd/${{ github.event.inputs.board_name }}/
           touch ../../../vendor/hmd/${{ github.event.inputs.board_name }}/version.mk
 
+          mkdir -p bootloader/u-boot15/common
+          cat << 'EOF' > bootloader/u-boot15/common/cfg_to_h.sh
+           #!/bin/bash
+           echo "Dummy bypass success"
+          EOF
+          chmod +x bootloader/u-boot15/common/cfg_to_h.sh
+
+          mkdir -p common include
+          cat << 'EOF' > common/nvmerge.h
+          #ifndef __NV_MERGE_CFG_H__
+          #define __NV_MERGE_CFG_H__
+
+          typedef unsigned char  BOOLEAN;
+          typedef unsigned char  uint8;
+          typedef unsigned short uint16;
+          typedef unsigned int   uint32;
+          typedef signed char    int8;
+          typedef signed short   int16;
+          typedef signed int     int32;
+
+          #define TRUE   1
+          #define FALSE  0
+          #define NV_SIZE_MAX  0x80000
+          #define BACKUP_NUM_MAX 100
+          #define INVALID_ID   0xffff
+
+          typedef struct _NVITEM_CFG {
+            char name[50];
+            unsigned int id;
+          } NVITEM_CFG;
+
+          /* Array nv_cfg dengan terminator string kosong agar perulangan strcmp di nvmerge.c aman */
+          NVITEM_CFG nv_cfg[100] = {
+            {"dummy_nv", 0x00},
+            {"\0", 0}
+          };
+
+          #endif //__NV_MERGE_CFG_H__
+          EOF
+          cp common/nvmerge.h include/nvmerge.h
+
           # Build flags
           export KCFLAGS="-std=gnu99 -w -I$(pwd)/include"
           export HOSTCFLAGS="-std=gnu99 -w"
