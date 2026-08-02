@@ -583,7 +583,7 @@
 		sprd,sleep-out-command = [13 50 00 01 11 13 14 00 01 29];
 
 		display-timings {
-			lcd_nt35695_fhd_timing0: timing0 {
+			nt35695_fhd_timing0: timing0 {
 				clock-frequency = <0x927c000>;
 				hactive = <0x438>;
 				vactive = <0x780>;
