@@ -760,7 +760,7 @@ static AvbSlotVerifyResult load_and_verify_vbmeta(
                  NULL);
       if (!allow_verification_error) {
         avb_debug("avb_vbmeta_image_verify failed while not allow verification error! \n");
-        goto out;
+        //goto out;
       }
       debugf("avb verify vbmeta image failed, but we allow these AVB ERROR\n");
       break;
