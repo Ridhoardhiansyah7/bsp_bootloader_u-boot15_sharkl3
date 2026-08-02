@@ -39,7 +39,7 @@
 		spi2 = "/soc/ap-apb/spi@70c00000";
 		spi3 = "/soc/ap-apb/spi@71400000";
 		spi4 = "/soc/aon/spi@41800000";
-    }
+    };
 
     soc {
         compatible = "simple-bus";
@@ -90,7 +90,7 @@
 		syscon@40353000 {
 			compatible = "syscon";
 			#syscon-cells = <0x02>;
-			reg = "@50\0\0\0`";
+			reg = <0x40353000 0x3000>;
 		};
 
 		syscon@40359000 {
@@ -108,13 +108,13 @@
 		syscon@40363000 {
 			compatible = "syscon";
 			#syscon-cells = <0x02>;
-			reg = "@60\0\0\00";
+			reg = <0x40363000 0x3000>;
 		};
 
 		syscon@40366000 {
 			compatible = "syscon";
 			#syscon-cells = <0x02>;
-			reg = "@6`\0\0\00";
+			reg = <0x40366000 0x3000>;
 		};
 
 		syscon@403a0000 {
