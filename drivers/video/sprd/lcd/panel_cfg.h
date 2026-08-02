@@ -57,12 +57,6 @@ static struct panel_cfg supported_panel[] = {
 		.drv = &ft8006p_huaxian_driver,
 	},
 #endif
-#ifdef CONFIG_LCD_FT8006S_BOE_MIPI_HD
-	{
-		.lcd_id = 0x8311,
-		.drv = &ft8006s_boe_mipi_hd_driver,
-	},
-#endif
 #ifdef CONFIG_LCD_ICNL9911_HLT_MIPI_HDP
         {
                 .lcd_id = 0x9911,

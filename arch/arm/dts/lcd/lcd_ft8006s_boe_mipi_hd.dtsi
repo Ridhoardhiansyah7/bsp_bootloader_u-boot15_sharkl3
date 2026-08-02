@@ -8,7 +8,7 @@
 		sprd,phy-bit-clock = <0xa1220>;	/* kbps */
 
 		/* panel interface type: 2:MIPI; 3:SPI */
-		sprd,panel-if-type = <3>;
+		sprd,panel-if-type = <2>;
 
 		/*----Id register ----*/
 		sprd,lcd-id-register = [da];
