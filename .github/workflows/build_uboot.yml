@@ -156,7 +156,7 @@ jobs:
             unsigned int id;
           } NVITEM_CFG;
 
-          /* Array nv_cfg dengan terminator string kosong agar perulangan strcmp di nvmerge.c aman */
+         
           NVITEM_CFG nv_cfg[100] = {
             {"dummy_nv", 0x00},
             {"\0", 0}
@@ -194,7 +194,7 @@ jobs:
 
           # VerifiedBoot & SecureBoot
           export BSP_PRODUCT_VBOOT=V2
-          export PRODUCT_DMVERITY_DISABLE=da;false
+          export PRODUCT_DMVERITY_DISABLE=false
           export BSP_PRODUCT_SECURE_BOOT=SPRD
           export BSP_BOARD_TEE_CONFIG=trusty
           export BSP_BOARD_TEECFG_CUSTOM=true
