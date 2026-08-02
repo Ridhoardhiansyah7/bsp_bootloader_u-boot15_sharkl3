@@ -14,7 +14,7 @@
 		sprd,lcd-id-register = [da];
 		sprd,lcd-id-value-len = <0x01>;
 		sprd,lcd-id-value = [21];
-		sprd,lcd-id-tokernel = <0x8311>;
+		sprd,lcd-id-tokernel = <0x8632>;
 
 		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x28>;
 		sprd,reset-off-sequence = <0x01 0x05>;
