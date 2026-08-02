@@ -13,19 +13,19 @@
 		sprd,dsi-lane-number = <4>;
 		sprd,dsi-color-format = "rgb888";
 
-		sprd,phy-bit-clock = <960000>;	/* kbps */
+		sprd,phy-bit-clock = <0xf4240>;	/* kbps */
 
 		/* panel interface type: 2:MIPI; 3:SPI */
 		sprd,panel-if-type = <2>;
 
 		/*----Id register ----*/
 		sprd,lcd-id-register = [F4];
-		sprd,lcd-id-value-len = <1>;
+		sprd,lcd-id-value-len = <0x01>;
 		sprd,lcd-id-value = [96];
 		sprd,lcd-id-tokernel = <0x96>;
 
-		sprd,reset-on-sequence = <1 5>, <0 5>, <1 5>, <0 5>, <1 20>;
-		sprd,reset-off-sequence = <0 20>;
+		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x05 0x00 0x05 0x01 0x14>;
+		ssprd,reset-off-sequence = <0x00 0x14>;
 
 		sprd,initial-command = [
 			23 00 00 02 FF EE
@@ -509,27 +509,22 @@
 			23 00 00 02 BA 03
 			13 78 00 01 11
 			13 64 00 01 29
-			];
-		sprd,sleep-in-command =  [
-			13 0A 00 01 28
-			13 78 00 01 10
-			];
-		sprd,sleep-out-command = [
-			13 78 00 01 11
-			13 64 00 01 29
-			];
+		];
+
+		sprd,sleep-in-command = [13 0a 00 01 28 13 78 00 01 10];
+		sprd,sleep-in-command = [13 0a 00 01 28 13 78 00 01 10];
 
 		display-timings {
 			lcd_nt35596_fhd_timing0: timing0 {
-				clock-frequency = <153600000>;
-				hactive = <1080>;
-				vactive = <1920>;
-				hback-porch = <16>;
-				hfront-porch = <176>;
-				vback-porch = <32>;
-				vfront-porch = <32>;
-				hsync-len = <10>;
-				vsync-len = <4>;
+				clock-frequency = <0x927c000>;
+				hactive = <0x438>;
+				vactive = <0x780>;
+				hback-porch = <0x10>;
+				hfront-porch = <0xb0>;
+				vback-porch = <0x20>;
+				vfront-porch = <0x20>;
+				hsync-len = <0x0a>;
+				vsync-len = <0x04>;
 			};
 		};
 	};
