@@ -1716,6 +1716,18 @@ int merge_bootargs(u8 *fdt_blob)
 		debugf("bootargs_ext apppend to bootargs failed [efused]\n");
 	}
 
+#if defined(CONFIG_TARGET_SP9863A_1H10_GO) && defined(CONFIG_TARGET_REALME_C11_2021)
+	if (s_boot_mode == CMD_NORMAL_MODE) {
+        debugf("Info: Injecting Realme C11 Normal Boot args...\n");
+        fdt_chosen_bootargs_append(fdt_blob, "boot_mode=normal", 1);
+        fdt_chosen_bootargs_append(fdt_blob, "prj_name=20781", 1);
+        fdt_chosen_bootargs_append(fdt_blob, "dtsi_name=20780", 1);
+        fdt_chosen_bootargs_append(fdt_blob, "audio_name=20780", 1);
+        fdt_chosen_bootargs_append(fdt_blob, "pcb_version=5", 1);
+        //fdt_chosen_bootargs_append(fdt_blob, "eng_version=user", 1);
+    }
+#endif
+
 	while ((prop_ext = strsep(&path_copy_ext, " ")) != NULL) {
 		path_copy = strdup(path);
 		if (path_copy == NULL) {
