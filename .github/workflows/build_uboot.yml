@@ -194,7 +194,7 @@ jobs:
 
           # VerifiedBoot & SecureBoot
           export BSP_PRODUCT_VBOOT=V2
-          export PRODUCT_DMVERITY_DISABLE=true
+          export PRODUCT_DMVERITY_DISABLE=da;false
           export BSP_PRODUCT_SECURE_BOOT=SPRD
           export BSP_BOARD_TEE_CONFIG=trusty
           export BSP_BOARD_TEECFG_CUSTOM=true
@@ -235,6 +235,6 @@ jobs:
         with:
           name: uboot-output-${{ github.event.inputs.board_name }}
           path: |
-            out_flat/*
-            *.bin
-            *.img
+            out_flat/fdl2.bin
+            out_flat/u-boot-dtb.bin
+            out_flat/u-boot.bin
