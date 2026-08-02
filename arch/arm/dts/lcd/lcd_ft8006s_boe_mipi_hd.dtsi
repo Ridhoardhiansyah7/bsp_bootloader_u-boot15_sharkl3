@@ -16,6 +16,9 @@
 		sprd,lcd-id-value = [21];
 		sprd,lcd-id-tokernel = <0x8311>;
 
+		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x28>;
+		sprd,reset-off-sequence = <0x01 0x05>;
+
 		/*---Bias Power---*/
 		sprd,power-i2c-bus = <0x04>;
 		sprd,power-i2c-addr = <0x3e>;
@@ -23,11 +26,7 @@
 		sprd,power-i2c-reg = <0x103ff>;
 		sprd,power-i2c-val = <0x14143380>;
 
-		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x28>;
-		sprd,reset-off-sequence = <0x01 0x05>;
-
 		sprd,use-dcs-write;
-
 		sprd,initial-command = [
 			39 00 00 02 41 5A 
 			39 00 00 03 41 5A 24 
@@ -143,7 +142,7 @@
 			39 00 00 02 53 24 
 			39 0A 00 02 55 00
 			05 00 00 01 29
-					
+
 		];
 
 		sprd,sleep-in-command = [15 5a 00 01 28 15 5f 00 01 10 29 00 00 02 17 5a 29 14 00 02 18 5a];
