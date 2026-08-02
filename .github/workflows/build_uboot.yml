@@ -194,7 +194,7 @@ jobs:
 
           # VerifiedBoot & SecureBoot
           export BSP_PRODUCT_VBOOT=V2
-          export PRODUCT_DMVERITY_DISABLE=false
+          export PRODUCT_DMVERITY_DISABLE=true
           export BSP_PRODUCT_SECURE_BOOT=SPRD
           export BSP_BOARD_TEE_CONFIG=trusty
           export BSP_BOARD_TEECFG_CUSTOM=true
