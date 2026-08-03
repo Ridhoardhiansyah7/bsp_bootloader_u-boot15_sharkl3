@@ -475,6 +475,12 @@ static int panel_power(int on)
 			sprd_gpio_direction_input(NULL, io->gpio_id);
 		}
 
+		if (io->gpio_tp_reset) {
+			sprd_gpio_request(NULL, io->gpio_tp_reset);
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 1);
+			mdelay(10);
+		}
+
 		sprd_gpio_request(NULL, io->gpio_reset);
 		timing = info->power_on_seq.timing;
 		for (i = 0; i < info->power_on_seq.items; i++) {
@@ -483,6 +489,11 @@ static int panel_power(int on)
 			mdelay(timing->delay);
 		}
 	} else {
+		
+		if (io->gpio_tp_reset) {
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 0);
+		}
+		
 		timing = info->power_off_seq.timing;
 		for (i = 0; i < info->power_off_seq.items; i++) {
 			timing = &info->power_off_seq.timing[i];
