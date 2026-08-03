@@ -16,6 +16,12 @@
 		sprd,lcd-id-value = [21];
 		sprd,lcd-id-tokernel = <0x8311>;
 
+		/*
+		 * This device's panel does not provide a readable LCD ID
+		 * sequence, so opt into the U-Boot no-ID bring-up fallback.
+		 */
+		sprd,lcd-no-id;
+
 		sprd,reset-on-sequence = <0x01 0x05 0x00 0x05 0x01 0x28>;
 		sprd,reset-off-sequence = <0x01 0x05>;
 
