@@ -2093,11 +2093,11 @@ int _boot_load_kernel_ramdisk_image(char *bootmode, boot_img_hdr * hdr, uchar **
 #else
 		partition = "recovery";
 #endif
-		lcd_printf("  > recovery mode");
+		lcd_printf("   > RECOVERY MODE");
 		debugf("enter recovery mode!\n");
 	} else {
 		partition = "boot";
-		lcd_printf("  > booting android os");
+		lcd_printf("   > BOOTING ANDROID OS");
 		debugf("enter boot mode!\n");
 	}
 
