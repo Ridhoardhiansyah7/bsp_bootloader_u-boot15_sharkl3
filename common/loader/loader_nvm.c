@@ -1488,11 +1488,23 @@ void load_and_merge_dtbo(uchar *partition, uchar *dt_start_addr)
 		}
 #endif
 
+		int current_dt_size = fdt_totalsize(dt_start_addr);
+		int expand_ret = fdt_open_into(dt_start_addr, dt_start_addr, current_dt_size + 102400); // 100kb
+		if (expand_ret) {
+			lcd_printf("Failed to expand DTB: %d\n", expand_ret);
+		}
+		
 		ret = fdt_overlay_apply(dt_start_addr, dtbo_addr);
 		if (ret) {
 			errorf("fdt_overlay_apply(): %s\n", fdt_strerror(ret));
+			lcd_printf("Failed to merge DTBO! Error: %d\n", ret);
+			udelay(3000000);
 			goto error;
+		} else {
+			lcd_printf("Dtbo merged!\n");
+			udelay(3000000);
 		}
+		
 		free(dtbo_addr);
 		dtbo_addr = NULL;
 		/* Only need to overlay one dtbo */
@@ -1715,18 +1727,6 @@ int merge_bootargs(u8 *fdt_blob)
 	if (ret) {
 		debugf("bootargs_ext apppend to bootargs failed [efused]\n");
 	}
-
-//#if defined(CONFIG_TARGET_SP9863A_1H10_GO) && defined(CONFIG_TARGET_REALME_C11_2021)
-	//if (s_boot_mode == CMD_NORMAL_MODE) {
-        debugf("Info: Injecting Realme C11 Normal Boot args...\n");
-        fdt_chosen_bootargs_append(fdt_blob, "boot_mode=normal", 1);
-        fdt_chosen_bootargs_append(fdt_blob, "prj_name=20781", 1);
-        fdt_chosen_bootargs_append(fdt_blob, "dtsi_name=20780", 1);
-        fdt_chosen_bootargs_append(fdt_blob, "audio_name=20780", 1);
-        fdt_chosen_bootargs_append(fdt_blob, "pcb_version=5", 1);
-        //fdt_chosen_bootargs_append(fdt_blob, "eng_version=user", 1);
-   // }
-//#endif
 
 	while ((prop_ext = strsep(&path_copy_ext, " ")) != NULL) {
 		path_copy = strdup(path);
