@@ -832,8 +832,4 @@
 		sprd,tp-reset-gpio = <0x91>;
 	};
 
-	&{/lcds} {
-		panel-drivers = <&lcd_ft8006s_boe_mipi_hd>;
-	};
-
 };
