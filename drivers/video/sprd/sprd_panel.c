@@ -603,6 +603,10 @@ static int of_parse_panel_power(const void *fdt, int offset, struct panel_info *
 	else
 		pr_err("There is no sprd,gpio-reset\n");
 
+	ret = fdt_getprop_u32(fdt, offset, "sprd,tp-reset-gpio", &val);
+	if (!ret) 
+		info->power_pin.gpio_tp_reset = val;
+	
 	return  0;
 }
 
