@@ -111,18 +111,18 @@ void dram_init_banksize(void)
 #define BQ2560X_I2C_BUS         4       
 #define BQ2560X_ADDR            0x6b    
 
-/* --- IC Register Map (Standard Texas Instruments BQ2560x) --- */
-#define BQ2560X7_REG_CONTROL    0x01    
-#define BQ2560X7_REG_VOLTAGE    0x02    
-#define BQ2560X7_REG_CURRENT    0x04    
-#define BQ2560X7_REG_SAFETY     0x06    
+/* --- IC Register Map (Texas Instruments BQ2560x) --- */
+#define BQ2560X_REG_CONTROL    0x01    
+#define BQ2560X_REG_VOLTAGE    0x02    
+#define BQ2560X_REG_CURRENT    0x04    
+#define BQ2560X_REG_SAFETY     0x06    
 
 /* --- Register Configuration Values & Bitmasks --- */
-#define BQ2560X7_SAFETY_LIMITS  0xb7    
-#define BQ2560X7_VOLTAGE_CFG    ((42 << 2) | 0x02)
-#define BQ2560X7_CURRENT_CFG    ((5 << 3) | 2)     
-#define BQ2560X7_CONTROL_CFG    0x38    
-#define BQ2560X7_CEN_BIT        BIT(2) 
+#define BQ2560X_SAFETY_LIMITS  0xb7    
+#define BQ2560X_VOLTAGE_CFG    ((42 << 2) | 0x02)
+#define BQ2560X_CURRENT_CFG    ((5 << 3) | 2)     
+#define BQ2560X_CONTROL_CFG    0x38    
+#define BQ2560X_CEN_BIT        BIT(2) 
 
 /* --- Battery NTC & Thermal Protection Parameters --- */
 #define BAT_NTC_ADC_CHANNEL     0       
