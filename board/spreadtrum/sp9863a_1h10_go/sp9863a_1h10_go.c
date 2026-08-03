@@ -151,156 +151,154 @@ static const struct {
 
 static int bq2560x_battery_temp_dc(void)
 {
-	int32_t raw[BAT_NTC_SAMPLES];
-	int32_t sum = 0;
-	int i, uv;
+    int32_t raw[BAT_NTC_SAMPLES];
+    int32_t sum = 0;
+    int i, uv;
 
-	if (pmic_adc_get_values(BAT_NTC_ADC_CHANNEL, ADC_SCALE_0,
-				BAT_NTC_SAMPLES, raw))
-		return BAT_TEMP_INVALID;
+    if (pmic_adc_get_values(BAT_NTC_ADC_CHANNEL, ADC_SCALE_0,
+                BAT_NTC_SAMPLES, raw))
+        return BAT_TEMP_INVALID;
 
-	for (i = 0; i < BAT_NTC_SAMPLES; i++)
-		sum += raw[i];
+    for (i = 0; i < BAT_NTC_SAMPLES; i++)
+        sum += raw[i];
 
-	uv = sprd_chan_small_adc_to_vol(BAT_NTC_ADC_CHANNEL, ADC_SCALE_0, 0,
-					sum / BAT_NTC_SAMPLES) * 1000;
+    uv = sprd_chan_small_adc_to_vol(BAT_NTC_ADC_CHANNEL, ADC_SCALE_0, 0,
+                    sum / BAT_NTC_SAMPLES) * 1000;
 
-	if (uv >= bat_ntc_table[0].uv)
-		return bat_ntc_table[0].temp_dc;
+    if (uv >= bat_ntc_table[0].uv)
+        return bat_ntc_table[0].temp_dc;
 
-	for (i = 1; i < ARRAY_SIZE(bat_ntc_table); i++) {
-		int hi_uv = bat_ntc_table[i - 1].uv;
-		int lo_uv = bat_ntc_table[i].uv;
+    for (i = 1; i < ARRAY_SIZE(bat_ntc_table); i++) {
+        int hi_uv = bat_ntc_table[i - 1].uv;
+        int lo_uv = bat_ntc_table[i].uv;
 
-		if (uv < lo_uv)
-			continue;
+        if (uv < lo_uv)
+            continue;
 
-		return bat_ntc_table[i].temp_dc +
-		       (bat_ntc_table[i - 1].temp_dc - bat_ntc_table[i].temp_dc) *
-		       (uv - lo_uv) / (hi_uv - lo_uv);
-	}
+        return bat_ntc_table[i].temp_dc +
+               (bat_ntc_table[i - 1].temp_dc - bat_ntc_table[i].temp_dc) *
+               (uv - lo_uv) / (hi_uv - lo_uv);
+    }
 
-	return bat_ntc_table[ARRAY_SIZE(bat_ntc_table) - 1].temp_dc;
+    return bat_ntc_table[ARRAY_SIZE(bat_ntc_table) - 1].temp_dc;
 }
 
 static int bq2560x_set_charging(int enable)
 {
-	struct udevice *chg;
-	int ret, val;
+    u8 val;
+    int ret;
 
-	ret = i2c_get_chip_for_busnum(BQ2560X_I2C_BUS, BQ2560X_ADDR, 1, &chg);
-	if (ret)
-		return ret;
+    i2c_set_bus_num(BQ2560X_I2C_BUS);
 
-	val = dm_i2c_reg_read(chg, BQ2560X_REG_CONTROL);
-	if (val < 0)
-		return val;
+    ret = i2c_read(BQ2560X_ADDR, BQ2560X_REG_CONTROL, 1, &val, 1);
+    if (ret)
+        return ret;
 
-	if (enable)
-		val &= ~BQ2560X_CEN_BIT;
-	else
-		val |= BQ2560X_CEN_BIT;
+    if (enable)
+        val &= ~BQ2560X_CEN_BIT;
+    else
+        val |= BQ2560X_CEN_BIT;
 
-	ret = dm_i2c_reg_write(chg, BQ2560X_REG_CONTROL, (u8)val);
-	return ret < 0 ? ret : 0;
+    ret = i2c_write(BQ2560X_ADDR, BQ2560X_REG_CONTROL, 1, &val, 1);
+    return ret;
 }
 
 int bq2560x_temp_guard(int blocked)
 {
-	int temp = bq2560x_battery_temp_dc();
-	int min = BAT_TEMP_MIN_DC, max = BAT_TEMP_MAX_DC;
-	int block;
+    int temp = bq2560x_battery_temp_dc();
+    int min = BAT_TEMP_MIN_DC, max = BAT_TEMP_MAX_DC;
+    int block;
 
-	if (temp == BAT_TEMP_INVALID) {
-		printf("[uboot] bq2560x: battery temperature unreadable, guard inactive\n");
-		return blocked;
-	}
+    if (temp == BAT_TEMP_INVALID) {
+        printf("[uboot] bq2560x: battery temperature unreadable, guard inactive\n");
+        return blocked;
+    }
 
-	if (blocked) {
-		min += BAT_TEMP_HYST_DC;
-		max -= BAT_TEMP_HYST_DC;
-	}
+    if (blocked) {
+        min += BAT_TEMP_HYST_DC;
+        max -= BAT_TEMP_HYST_DC;
+    }
 
-	block = (temp < min || temp > max);
+    block = (temp < min || temp > max);
 
-	if (block != blocked) {
-		if (bq2560x_set_charging(!block)) {
-			printf("[uboot] bq2560x: failed to %s charging\n",
-			       block ? "inhibit" : "resume");
-			return blocked;
-		}
-		printf("[uboot] bq2560x: battery %d.%dC, charging %s\n",
-		       temp / 10, temp < 0 ? -(temp % 10) : temp % 10,
-		       block ? "inhibited" : "resumed");
-	}
+    if (block != blocked) {
+        if (bq2560x_set_charging(!block)) {
+            printf("[uboot] bq2560x: failed to %s charging\n",
+                   block ? "inhibit" : "resume");
+            return blocked;
+        }
+        printf("[uboot] bq2560x: battery %d.%dC, charging %s\n",
+               temp / 10, temp < 0 ? -(temp % 10) : temp % 10,
+               block ? "inhibited" : "resumed");
+    }
 
-	return block;
+    return block;
 }
 
 int bq2560x_battery_temp(void)
 {
-	return bq2560x_battery_temp_dc();
+    return bq2560x_battery_temp_dc();
 }
 
 static void bq2560x_init(void)
 {
-	struct udevice *chg;
-	int ret;
+    u8 val;
+    int ret;
 
-	ret = i2c_get_chip_for_busnum(BQ2560X_I2C_BUS, BQ2560X_ADDR, 1, &chg);
-	if (ret) {
-		printf("[uboot] bq2560x: i2c%d addr 0x%02x not found (%d)\n",
-		       BQ2560X_I2C_BUS, BQ2560X_ADDR, ret);
-		return;
-	}
+    i2c_set_bus_num(BQ2560X_I2C_BUS);
 
-	ret = dm_i2c_reg_write(chg, BQ2560X_REG_SAFETY, BQ2560X_SAFETY_LIMITS);
-	if (ret < 0) {
-		printf("[uboot] bq2560x: REG06 write failed (%d)\n", ret);
-		return;
-	}
+    /* Inisialisasi Safety Register (REG06) */
+    val = BQ2560X_SAFETY_LIMITS;
+    ret = i2c_write(BQ2560X_ADDR, BQ2560X_REG_SAFETY, 1, &val, 1);
+    if (ret < 0) {
+        printf("[uboot] bq2560x: REG06 write failed (%d)\n", ret);
+        return;
+    }
 
-	ret = dm_i2c_reg_read(chg, BQ2560X_REG_SAFETY);
-	if (ret < 0)
-		printf("[uboot] bq2560x: REG06 read-back failed (%d)\n", ret);
-	else if (ret == BQ2560X_SAFETY_LIMITS)
-		printf("[uboot] bq2560x: safety limits set, REG06=0x%02x (4.34V/1984mA)\n",
-		       ret);
-	else
-		printf("[uboot] bq2560x: REG06 locked, kept 0x%02x (wanted 0x%02x)\n",
-		       ret, BQ2560X_SAFETY_LIMITS);
+    ret = i2c_read(BQ2560X_ADDR, BQ2560X_REG_SAFETY, 1, &val, 1);
+    if (ret < 0) {
+        printf("[uboot] bq2560x: REG06 read-back failed\n");
+    } else if (val == BQ2560X_SAFETY_LIMITS) {
+        printf("[uboot] bq2560x: safety limits set, REG06=0x%02x\n", val);
+    } else {
+        printf("[uboot] bq2560x: REG06 locked, kept 0x%02x (wanted 0x%02x)\n",
+               val, BQ2560X_SAFETY_LIMITS);
+    }
 
-	ret = dm_i2c_reg_write(chg, BQ2560X_REG_VOLTAGE, BQ2560X_VOLTAGE_CFG);
-	if (ret < 0)
-		printf("[uboot] bq2560x: REG02 write failed (%d)\n", ret);
+    /* Inisialisasi Voltage Register (REG02) */
+    val = BQ2560X_VOLTAGE_CFG;
+    ret = i2c_write(BQ2560X_ADDR, BQ2560X_REG_VOLTAGE, 1, &val, 1);
+    if (ret < 0)
+        printf("[uboot] bq2560x: REG02 write failed\n");
 
-	ret = dm_i2c_reg_write(chg, BQ2560X_REG_CURRENT, BQ2560X_CURRENT_CFG);
-	if (ret < 0)
-		printf("[uboot] bq2560x: REG04 write failed (%d)\n", ret);
+    /* Inisialisasi Current Register (REG04) */
+    val = BQ2560X_CURRENT_CFG;
+    ret = i2c_write(BQ2560X_ADDR, BQ2560X_REG_CURRENT, 1, &val, 1);
+    if (ret < 0)
+        printf("[uboot] bq2560x: REG04 write failed\n");
 
-	ret = dm_i2c_reg_write(chg, BQ2560X_REG_CONTROL, BQ2560X_CONTROL_CFG);
-	if (ret < 0)
-		printf("[uboot] bq2560x: REG01 write failed (%d)\n", ret);
+    /* Inisialisasi Control Register (REG01) */
+    val = BQ2560X_CONTROL_CFG;
+    ret = i2c_write(BQ2560X_ADDR, BQ2560X_REG_CONTROL, 1, &val, 1);
+    if (ret < 0)
+        printf("[uboot] bq2560x: REG01 write failed\n");
 
-	printf("[uboot] bq2560x: charge cfg 4.34V/1240mA (REG02=0x%02x REG04=0x%02x REG01=0x%02x)\n",
-	       BQ2560X_VOLTAGE_CFG, BQ2560X_CURRENT_CFG, BQ2560X_CONTROL_CFG);
+    printf("[uboot] bq2560x: initialized on bus %d at addr 0x%02x\n",
+           BQ2560X_I2C_BUS, BQ2560X_ADDR);
 
-	bq2560x_temp_guard(0);
+    bq2560x_temp_guard(0);
 }
 
 static void battery_init(void)
 {
-
-	/* Must run before anything else can touch the charger. */
-	bq2560x_init();
-	
-	sprdchg_common_cfg();
-	//sprdchg_fan54015_init();
-	//sprdbat_init();
+    /* Must run before anything else can touch the charger. */
+    bq2560x_init();
+    
+    sprdchg_common_cfg();
 #ifdef CONFIG_BQ2560X_CHARGE_IC
-	sprdchg_bq2560x_init();
+    sprdchg_bq2560x_init();
 #endif
-	sprdbat_init();
+    sprdbat_init();
 }
 
 int board_late_init(void)
