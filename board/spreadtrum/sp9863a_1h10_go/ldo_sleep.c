@@ -20,14 +20,14 @@ void DCDC_ldo_power_on()
 	//regulator_enable("vddemmccore");
 	//regulator_enable("vddsdcore");
 	//regulator_enable("vddsdio");
-	//regulator_enable("vdd28");
+	regulator_enable("vdd28");
 	//regulator_enable("vddwifipa");
 	//regulator_enable("vdddcxo");
 	//regulator_enable("vddusb33");
 	//regulator_enable("vddcamd");
 	//regulator_enable("vddcon");
 	//regulator_enable("vddcamio");
-	//regulator_enable("vdd18");
+	regulator_enable("vdd18");
 	regulator_enable("vddrf18");
 	regulator_enable("vddrf15");
 	//regulator_enable("vddldomem");
