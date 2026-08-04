@@ -5,5 +5,5 @@
 # SPDX-License-Identifier:	GPL-2.0+
 #
 
-obj-y	:= sp9863a_1h10_go.o sdio_cfg.o sprd_kp.o modem_entry.o pinmap-sp9863a.o ldo_sleep.o sprd_bl.o regulator_init.o lcd_printf.o
+obj-y	:= sp9863a_1h10_go.o sdio_cfg.o sprd_kp.o modem_entry.o pinmap-sp9863a.o ldo_sleep.o sprd_bl.o regulator_init.o lcd_printf.o extlinux_diag.o
 
