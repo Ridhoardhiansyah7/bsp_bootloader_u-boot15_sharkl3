@@ -380,6 +380,8 @@
 /*active arm7 ram before access to it*/
 #define CONFIG_ARM7_RAM_ACTIVE
 
+#define CONFIG_VIBRATOR
+
 
 #define CONFIG_SYS_I2C
 #define CONFIG_SPRD_I2C_V3
