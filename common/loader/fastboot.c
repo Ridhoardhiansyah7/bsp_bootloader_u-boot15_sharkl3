@@ -1219,10 +1219,6 @@ int wait_for_keypress(){
 }
 
 // stub
-int get_diag_flag(void) { 
-	return 0; 
-}
-
 int lcd_low_bat(void) { 
 	return 0; 
 }
