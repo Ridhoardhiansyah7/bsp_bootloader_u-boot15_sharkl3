@@ -6,7 +6,6 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 #include <asm/io.h>
-#include <asm/gpio.h>
 #include <asm/arch/sprd_reg.h>
 #include <common.h>
 #include <malloc.h>
@@ -320,16 +319,6 @@ int board_late_init(void)
 #endif
 	battery_init();
 	debugf("CHG init OK!\n");
-	if (gpio_request(337, "tp_reset") == 0) {
-		gpio_direction_output(337, 1);
-		mdelay(20); 
-		
-		gpio_direction_output(337, 0);
-		mdelay(50); 
-		
-		gpio_direction_output(337, 1);
-		mdelay(20);
-	}
 #endif
 	board_keypad_init();
 	
