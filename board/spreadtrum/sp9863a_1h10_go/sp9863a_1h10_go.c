@@ -16,7 +16,6 @@
 #include <sprd_led.h>
 #include <sprd_battery.h>
 #include <clk.h>
-#include <asm/gpio.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 phys_size_t real_ram_size = 0x40000000;
@@ -322,17 +321,6 @@ int board_late_init(void)
 	debugf("CHG init OK!\n");
 #endif
 	board_keypad_init();
-
-	if (gpio_request(337, "tp_reset") == 0) {
-		gpio_direction_output(337, 1);
-		mdelay(20); 
-		
-		gpio_direction_output(337, 0);
-		mdelay(50); 
-		
-		gpio_direction_output(337, 1);
-		mdelay(20);
-	}
 	
 	return 0;
 }
