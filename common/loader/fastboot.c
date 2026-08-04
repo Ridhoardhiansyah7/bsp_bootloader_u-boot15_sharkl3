@@ -1219,14 +1219,6 @@ int wait_for_keypress(){
 }
 
 // stub
-int s_is6000F(void) { 
-	return 0;
-}
-
-int get_hmd_configs(void) {
-	return 0; 
-}
-
 int get_diag_flag(void) { 
 	return 0; 
 }
