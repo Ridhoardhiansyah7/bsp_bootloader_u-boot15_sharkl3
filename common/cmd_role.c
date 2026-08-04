@@ -47,7 +47,7 @@ int do_role(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[])
 			debugf("Get chipram env mode %x,go download\n", boot_role);
 			break;
 		case BOOTLOADER_MODE_LOAD:
-			setenv("bootcmd", "cboot;cboot fastboot");
+			setenv("bootcmd", "extlinux_scan");
 			debugf("Get chipram env mode %x,go cboot\n", boot_role);
 			break;
 		default :
