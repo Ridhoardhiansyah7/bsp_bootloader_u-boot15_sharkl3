@@ -16,6 +16,8 @@ static int power_on_voltage_init(void)
 	printf("version read val is :%d\n",MFT_ID_READ);
 
 	regulator_set_voltage("vddsim2",2800);
+	regulator_set_voltage("vdd28", 2800);
+	regulator_set_voltage("vdd18", 1800);
 
 	if (MFT_ID_READ == L3R_VERSION) { //L3R version
 		u32 block, val;
