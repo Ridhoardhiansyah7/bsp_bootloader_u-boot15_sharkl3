@@ -155,7 +155,7 @@
 		sprd,sleep-out-command = [15 78 00 01 11 15 32 00 01 29];
 
 		display-timings {
-			ft8006s_boe_timing0: timing0 {
+			 timing0 {
 				clock-frequency = <0x5b8d800>;
 				hactive = <0x2d0>;
 				vactive = <0x640>;
