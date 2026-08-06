@@ -476,9 +476,11 @@ static int panel_power(int on)
 		}
 
 		if (io->gpio_tp_reset) {
-			sprd_gpio_request(NULL, io->gpio_tp_reset);
-			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 1);
-			mdelay(10);
+			sprd_gpio_request(NULL, io->gpio_tp_reset); // <-- Jangan lupa di-request dulu
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 0); // 1. Tarik ke Low (Reset)
+			mdelay(10);                                            // 2. Tahan 10ms
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 1); // 3. Tarik ke High (Lepas reset / Nyala)
+			mdelay(20);                                            // 4. Tunggu chip ready 20ms
 		}
 
 		sprd_gpio_request(NULL, io->gpio_reset);
