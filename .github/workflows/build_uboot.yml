@@ -225,16 +225,14 @@ jobs:
           
         shell: bash
 
-      - name: Dump SPI2 Pinmap Hex from Build Output
+      - name: Dump Pinmap Data Section
         run: |
-          find . -name "pinmap-sp9863a.o"
-          
           OBJ_FILE=$(find . -name "pinmap-sp9863a.o" | head -n 1)
-          if [ -f "$OBJ_FILE" ]; then
-              xxd -g 4 "$OBJ_FILE" | grep -i "spi2" -C 2 || od -An -t x4 -v "$OBJ_FILE" | head -n 50
-          else
-              echo "Object not found!"
-          fi
+          python3 -c "
+          with open('$OBJ_FILE', 'rb') as f:
+              content = f.read()
+          print(content.hex()[2000:4000])
+          "
 
       - name: Filter Root Files from Out Directory
         run: |
