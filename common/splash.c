@@ -26,25 +26,9 @@
 #include <lcd.h>
 #include <logo_bin.h>
 
-/*__weak int splash_screen_prepare(uchar *logo_part_name, u8 *addr)
+__weak int splash_screen_prepare(uchar *logo_part_name, u8 *addr)
 {
 	return 0;
-}*/
-
-int splash_screen_prepare(uchar *logo_part_name, u8 *addr)
-{
-	if (!logo_part_name)
-		return -1;
-
-	if (strcmp((char *)logo_part_name, FBOOT_LOGO_PART) == 0) {
-		if (common_raw_read(logo_part_name, 0, 0, addr) != 0) {
-			debugf("failed to read raw bmp from %s\n", logo_part_name);
-			return -1;
-		}
-		return 0;
-	}
-	
-	return get_logo_bin_info(addr, logo_part_name);
 }
 
 #ifdef CONFIG_SPLASH_SCREEN_ALIGN
