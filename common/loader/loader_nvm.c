@@ -2494,15 +2494,16 @@ int loader_binding_data_set(void)
 
 	lcd_cursor_mid_left();
 	
-	if(lcd_low_bat == 1 ||((cmd_fastboot ==1)&&(low_bat==1)))  
+	/*if(lcd_low_bat == 1 ||((cmd_fastboot ==1)&&(low_bat==1)))  
 	{
 		debugf("lcd_low_bat is ture\n");
 		lcd_printf("can't enter fastboot when power is < 30%!!!, rebooting\n\n");
 		//lcd_printf("The battery capacity is less than 30%, forbit enter fastboot mode!!!\n");
-	}		
+	}
+	/*
+	
 	/*set device state*/
 	get_lock_status();
-
 	if(g_DeviceStatus == VBOOT_STATUS_LOCK){
 		debugf("Info: Bootloader is LOCKED!!!\n");
 	}else if(g_DeviceStatus == VBOOT_STATUS_UNLOCK){
