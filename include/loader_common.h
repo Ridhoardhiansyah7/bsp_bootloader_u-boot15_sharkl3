@@ -128,12 +128,15 @@ typedef struct boot_image_required {
 	char *mem_addr;	//target memory addr
 } boot_image_required_t;
 
+#ifndef NV_HEADER_DEFINED
+#define NV_HEADER_DEFINED
 typedef struct _NV_HEADER {
 	uint32_t magic;
 	uint32_t len;
 	uint32_t checksum;
 	uint32_t version;
 } nv_header_t;
+#endif
 
 #ifdef CONFIG_SP_DDR_BOOT
 typedef struct sp_ddr_boot {
