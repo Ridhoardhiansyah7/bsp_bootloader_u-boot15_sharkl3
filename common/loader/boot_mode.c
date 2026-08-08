@@ -198,7 +198,7 @@ void fastboot_mode(void)
 	stop_watchdog();
 	setenv("bootmode", "fastboot");
 #ifdef CONFIG_SPLASH_SCREEN
-	logo_display(LOGO_NORMAL_POWER, BACKLIGHT_ON, LCD_ON);
+	logo_display(LOGO_FASTBOOT, BACKLIGHT_ON, LCD_ON);
 #ifdef CONFIG_VIBRATOR
 	vibrator_hw_init();
 	set_vibrator(1);
