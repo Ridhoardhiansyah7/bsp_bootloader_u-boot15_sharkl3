@@ -31,6 +31,7 @@
 #include <android_bootimg.h>
 #include <boot_mode.h>
 #include <dl_common.h>
+#include <loader_common.h>
 #include "sparse_format.h"
 #include <linux/usb/usb_uboot.h>
 #include <sprd_common_rw.h>
@@ -1259,7 +1260,7 @@ void fb_cmd_setrma(const char *arg, void *data, uint64_t sz){
 		fastboot_fail("time out");
 	}
 	lcd_clear();
-	lcd_splash("fbootlogo");
+	lcd_splash(FBOOT_LOGO_PART);
 	lcd_printf("\n   fastboot mode");
 }
 
