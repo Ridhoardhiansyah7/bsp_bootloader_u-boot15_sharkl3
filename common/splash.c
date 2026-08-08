@@ -89,8 +89,8 @@ int splash_get_bpix(uchar *logo_part_name)
 		debug("failed to read logo partition:%s\n", logo_part_name);
 		return -1;
 	}
-	
-	if (logo_part_name && strcmp((char *)logo_part_name, "fbootlogo") == 0) {
+
+	if (logo_part_name && strcmp((char *)logo_part_name, FBOOT_LOGO_PART) == 0) {
 		bpix = bmp_get_bpix(bmp);
 	} else {
 		bpix = get_logo_bin_info(bmp, logo_part_name);
