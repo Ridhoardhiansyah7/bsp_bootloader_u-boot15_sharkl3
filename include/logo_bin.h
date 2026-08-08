@@ -4,6 +4,7 @@
 #include <boot_mode.h>
 
 #define LOGO_NORMAL_POWER 		3
+#define LOGO_FASTBOOT           0xFA
 #define LOGO_LOW_VOL 			0
 #define LOGO_LOW_BATTERY_CHARGING	1
 
