@@ -494,10 +494,17 @@ int splash_screen_prepare(uchar *logo_part_name, u8 *addr)
 
 	if (logo_part_name && strcmp((char *)logo_part_name, FBOOT_LOGO_PART) == 0) {
 #ifndef CONFIG_ZEBU
+		
+		size = lcd_get_size(&lcd_line_length);
+		if (size == 0) {
+			size = 0x400000; /* 4MB */
+		}
+		
 		if (0 != common_raw_read(logo_part_name, (uint64_t)0, (uint64_t)0, addr)) {
 			errorf("failed to read raw bmp partition:%s\n", logo_part_name);
 			return -1;
 		}
+		
 #else
 		memcpy(addr, 0xb0000000, (size_t)size);
 #endif
