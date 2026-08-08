@@ -91,7 +91,13 @@ int splash_get_bpix(uchar *logo_part_name)
 	}
 
 	if (logo_part_name && strcmp((char *)logo_part_name, FBOOT_LOGO_PART) == 0) {
-		bpix = bmp_get_bpix(bmp);
+		/* ensure header is 'B' dan 'M' (0x4D42) */
+		if (bmp[0] == 'B' && bmp[1] == 'M') {
+			bpix = bmp_get_bpix(bmp);
+		} else {
+			debugf("fbootlogo header invalid, defaulting bpix to 16/32\n");
+			bpix = 32;
+		}
 	} else {
 		bpix = get_logo_bin_info(bmp, logo_part_name);
 	}
