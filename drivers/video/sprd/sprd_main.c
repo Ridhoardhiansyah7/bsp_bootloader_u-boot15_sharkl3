@@ -257,8 +257,15 @@ void logo_display(int index, int backlight_value, int lcd_enable)
 	uint32_t lcd_init_time;
 	uint32_t backlight_on_time;
 	uint32_t uboot_consume_time;
+	const char *part_name = LOGO_PART;
 
-	logo_index = index;
+	if (index == LOGO_FASTBOOT) {
+		part_name = "fbootlogo";
+		logo_index = 0;
+	} else {
+		logo_index = index;
+	}
+	
 #ifdef CONFIG_SPLASH_SCREEN
 	lcd_init_time = SCI_GetTickCount();
 	printf("lcd start init time:%dms\n", lcd_init_time);
@@ -266,7 +273,8 @@ void logo_display(int index, int backlight_value, int lcd_enable)
 		extern void lcd_enable(void);
 		debug("[LCD] Drawing the logo...\n");
 		drv_lcd_init();
-		lcd_splash(LOGO_PART);
+		//lcd_splash(LOGO_PART);
+		lcd_splash((uchar *)part_name);
 		lcd_enable();
 	}
 #ifdef CONFIG_SPRD_SOC_SP9853I
