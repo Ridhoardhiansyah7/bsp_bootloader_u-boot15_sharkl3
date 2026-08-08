@@ -36,6 +36,7 @@ extern unsigned char vendorboot_cmdline[VENDOR_BOOT_ARGS_SIZE];
 
 #define SPL_PART "spl"
 #define LOGO_PART "logo"
+#define FBOOT_LOGO_PART "fbootlogo"	
 #define CHARGER_LOGO_PART "chargelogo"
 #define BOOT_PART "boot"
 #define VENDOR_BOOT_PART "vendor_boot"
