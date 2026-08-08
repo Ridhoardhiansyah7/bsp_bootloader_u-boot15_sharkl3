@@ -260,7 +260,7 @@ void logo_display(int index, int backlight_value, int lcd_enable)
 	const char *part_name = LOGO_PART;
 
 	if (index == LOGO_FASTBOOT) {
-		part_name = "fbootlogo";
+		part_name = FBOOT_LOGO_PART;
 		logo_index = 0;
 	} else {
 		logo_index = index;
