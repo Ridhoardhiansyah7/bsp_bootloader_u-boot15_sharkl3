@@ -386,9 +386,13 @@
 /*active arm7 ram before access to it*/
 #define CONFIG_ARM7_RAM_ACTIVE
 
+/* Vibrator */
 #define CONFIG_VIBRATOR
 #define CONFIG_DM_SC27XX_VIBRA
 
+/* Charge */
+#define CONFIG_CHG_LED 
+#define CONFIG_SHOW_CHGLOGO
 
 #define CONFIG_SYS_I2C
 #define CONFIG_SPRD_I2C_V3
