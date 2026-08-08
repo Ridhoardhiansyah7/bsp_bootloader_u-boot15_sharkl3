@@ -1218,23 +1218,6 @@ int wait_for_keypress(){
 	return key_code;
 }
 
-// stub
-int lcd_low_bat(void) { 
-	return 0; 
-}
-
-void display_state_verified_yellow(void) {
-	
-}
-
-void display_state_verified_red(void) {
-	
-}
-
-void display_state_verified_orange(void) {
-	
-}
-
 #define  SOCID_SIZE_IN_WORDS 8
 void fb_cmd_getlcs(const char *arg, void *data, uint64_t sz){
 	int ret = 0;
@@ -1276,7 +1259,7 @@ void fb_cmd_setrma(const char *arg, void *data, uint64_t sz){
 		fastboot_fail("time out");
 	}
 	lcd_clear();
-	lcd_splash("logo");
+	lcd_splash("fbootlogo");
 	lcd_printf("\n   fastboot mode");
 }
 
