@@ -15,12 +15,15 @@
 #define PART_FAIL   -1
 #define PART_FATAL_ERR -2
 
+#ifndef NV_HEADER_DEFINED
+#define NV_HEADER_DEFINED
 typedef struct _NV_HEADER {
 	uint32_t magic;
 	uint32_t len;
 	uint32_t checksum;
 	uint32_t version;
 } nv_header_t;
+#endif
 
 unsigned short fdl_calc_checksum(unsigned char *data, unsigned long len);
 unsigned char fdl_check_crc(uint8_t * buf, uint32_t size, uint32_t checksum);
