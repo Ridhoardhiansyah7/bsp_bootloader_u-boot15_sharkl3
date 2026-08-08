@@ -261,6 +261,7 @@ void logo_display(int index, int backlight_value, int lcd_enable)
 
 	if (index == LOGO_FASTBOOT) {
 		part_name = FBOOT_LOGO_PART;
+		logo_index = LOGO_FASTBOOT;
 	} else {
 		logo_index = index;
 	}
