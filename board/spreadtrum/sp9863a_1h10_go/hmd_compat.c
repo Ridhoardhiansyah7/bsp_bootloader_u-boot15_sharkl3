@@ -18,3 +18,19 @@ bool get_diag_flag(void)
 {
 	return true;
 }
+
+int lcd_low_bat(void) { 
+	return 0; 
+}
+
+void display_state_verified_yellow(void) {
+	
+}
+
+void display_state_verified_red(void) {
+	
+}
+
+void display_state_verified_orange(void) {
+	
+}
