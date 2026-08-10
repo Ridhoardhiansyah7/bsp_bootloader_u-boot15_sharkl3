@@ -106,16 +106,10 @@ unsigned check_reboot_mode(void)
 		if(rst_mode == HWRST_STATUS_RECOVERY) {
 			bootcause_cmdline="Reboot into reocovery";
 			return CMD_RECOVERY_MODE;
-		} else if(rst_mode == HWRST_STATUS_FASTBOOT)
-			{	
-				if(1 == low_bat)
-					{	
-						bootcause_cmdline="Reboot into normal";
-						return CMD_NORMAL_MODE;
-					}
-				else
-					return CMD_FASTBOOT_MODE;
-			}
+		} else if(rst_mode == HWRST_STATUS_FASTBOOT) {
+			bootcause_cmdline="Reboot into fastboot";
+			return CMD_FASTBOOT_MODE;
+		}
 		else if(rst_mode == HWRST_STATUS_NORMAL) {
 			bootcause_cmdline="Reboot into normal";
 			return CMD_NORMAL_MODE;
@@ -175,18 +169,12 @@ unsigned check_reboot_mode(void)
 	} else if(reg_rst_mode) {
 		printf("register reboot method reg_rst_mode is %x\n", reg_rst_mode);
 		if(rst_mode == HWRST_STATUS_RECOVERY) {
-			bootcause_cmdline="Reboot into reocovery";
+			bootcause_cmdline="Reboot into recovery";
 			return CMD_RECOVERY_MODE;
-		} else if(rst_mode == HWRST_STATUS_FASTBOOT)
-			{	
-				if(1 == low_bat)
-					{	
-						bootcause_cmdline="Reboot into normal";
-						return CMD_NORMAL_MODE;
-					}
-				else
-					return CMD_FASTBOOT_MODE;
-			}
+		} else if(rst_mode == HWRST_STATUS_FASTBOOT) {
+			bootcause_cmdline="Reboot into fastboot";
+			return CMD_FASTBOOT_MODE;
+		}
 		else if(rst_mode == HWRST_STATUS_NORMAL) {
 			bootcause_cmdline="Reboot into normal";
 			return CMD_NORMAL_MODE;
