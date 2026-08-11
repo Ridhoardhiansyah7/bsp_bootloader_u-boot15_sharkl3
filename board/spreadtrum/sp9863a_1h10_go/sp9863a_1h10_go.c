@@ -20,6 +20,12 @@
 DECLARE_GLOBAL_DATA_PTR;
 phys_size_t real_ram_size = 0x40000000;
 
+int misc_init_r(void)
+{
+	/*reserver for future use*/
+	return 0;
+}
+
 phys_size_t get_real_ram_size(void)
 {
         return real_ram_size;
