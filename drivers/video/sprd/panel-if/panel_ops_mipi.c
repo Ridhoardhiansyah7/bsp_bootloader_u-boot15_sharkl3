@@ -475,14 +475,6 @@ static int panel_power(int on)
 			sprd_gpio_direction_input(NULL, io->gpio_id);
 		}
 
-		if (io->gpio_tp_reset) {
-			sprd_gpio_request(NULL, io->gpio_tp_reset); // <-- Jangan lupa di-request dulu
-			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 0); // 1. Tarik ke Low (Reset)
-			mdelay(10);                                            // 2. Tahan 10ms
-			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 1); // 3. Tarik ke High (Lepas reset / Nyala)
-			mdelay(20);                                            // 4. Tunggu chip ready 20ms
-		}
-
 		sprd_gpio_request(NULL, io->gpio_reset);
 		timing = info->power_on_seq.timing;
 		for (i = 0; i < info->power_on_seq.items; i++) {
@@ -491,10 +483,6 @@ static int panel_power(int on)
 			mdelay(timing->delay);
 		}
 	} else {
-		
-		if (io->gpio_tp_reset) {
-			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 0);
-		}
 		
 		timing = info->power_off_seq.timing;
 		for (i = 0; i < info->power_off_seq.items; i++) {

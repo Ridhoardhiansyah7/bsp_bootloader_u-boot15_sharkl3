@@ -829,7 +829,6 @@
 		sprd,lcd-avdd-gpio = <0x04>;
 		sprd,lcd-avee-gpio = <0x05>;
 		sprd,lcd-reset-gpio = <0x32>;
-		sprd,tp-reset-gpio = <0x91>;
 	};
 
 };

@@ -155,7 +155,6 @@ struct power_gpio {
 	uint8_t gpio_iovdd;
 	uint8_t gpio_id;
 	uint8_t gpio_3v3en;
-	uint8_t gpio_tp_reset;
 	uint8_t reserved_1;
 	uint8_t reserved_2;
 
