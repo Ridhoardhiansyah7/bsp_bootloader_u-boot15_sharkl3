@@ -22,8 +22,8 @@ unsigned char board_key_scan(void)
 	uint32_t key_code = KEY_RESERVED;
 	int gpio_volumeup = -1;
 	int gpio_volumedown = -1;
+	int retry;
 
-	// 1. Cek Volume Atas (Vol +) duluan lewat EIC
 	sprd_eic_request(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
 	udelay(3000);
 	gpio_volumeup = sprd_eic_get(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
@@ -34,7 +34,14 @@ unsigned char board_key_scan(void)
 		return key_code;
 	}
 
-	gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
+	for (retry = 0; retry < 5; retry++) {
+		gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
+		if (gpio_volumedown == 0) {
+			break;
+		}
+		udelay(2000);
+	}
+	
 	debugf("gpio_volumedown = %d\n", gpio_volumedown);
 	
 	if (gpio_volumedown == 0) {
