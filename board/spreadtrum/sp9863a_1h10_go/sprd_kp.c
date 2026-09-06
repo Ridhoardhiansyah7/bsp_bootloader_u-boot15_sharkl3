@@ -26,15 +26,27 @@ unsigned char board_key_scan(void)
 	sprd_eic_request(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
 	udelay(3000);
 	gpio_volumeup = sprd_eic_get(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
+	debugf("gpio_volumeup = %d\n", gpio_volumeup);
+	
+	if(gpio_volumeup < 0) {
+		errorf("[eic keys] volumeup : sprd_eic_get return ERROR!\n");
+	}
+
 	if(gpio_volumeup > 0) {
 		key_code = KEY_VOLUMEUP;
 		debugf("[eic keys] volumeup pressed!\n");
-	}
-	
-	gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
-	if(gpio_volumedown == 0) {
-		key_code = KEY_VOLUMEDOWN;
-		debugf("[gpio keys] volumedown pressed!\n");
+	} else {
+		gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
+		debugf("gpio_volumedown = %d\n", gpio_volumedown);
+		
+		if(gpio_volumedown < 0) {
+			errorf("[gpio keys] volumedown : sprd_gpio_get return ERROR!\n");
+		}
+		
+		if(gpio_volumedown == 0) {
+			key_code = KEY_VOLUMEDOWN;
+			debugf("[gpio keys] volumedown pressed!\n");
+		}
 	}
 
 	if (KEY_RESERVED == key_code)
