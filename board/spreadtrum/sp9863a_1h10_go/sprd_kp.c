@@ -54,7 +54,7 @@ unsigned int check_key_boot(unsigned char key)
 {
 	/*if (KEY_VOLUMEUP == key)
 		return CMD_FACTORYTEST_MODE;*/
-	if(KEY_HOME == key)
+	if(KEY_VOLUMEUP == key)
 		return CMD_FASTBOOT_MODE;
 	else if(KEY_VOLUMEDOWN== key)
 		return CMD_RECOVERY_MODE;
