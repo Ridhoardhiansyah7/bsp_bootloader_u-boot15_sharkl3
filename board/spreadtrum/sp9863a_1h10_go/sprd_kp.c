@@ -27,14 +27,14 @@ unsigned char board_key_scan(void)
 	udelay(3000);
 	gpio_volumeup = sprd_eic_get(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
 	if(gpio_volumeup > 0) {
-		key_code = KEY_VOLUMEDOWN;
-		debugf("[eic keys] volumedown pressed!\n");
-	 }
-
+		key_code = KEY_VOLUMEUP;
+		debugf("[eic keys] volumeup pressed!\n");
+	}
+	
 	gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
 	if(gpio_volumedown == 0) {
-		key_code = KEY_VOLUMEUP;
-		debugf("[gpio keys] volumeup pressed!\n");
+		key_code = KEY_VOLUMEDOWN;
+		debugf("[gpio keys] volumedown pressed!\n");
 	}
 
 	if (KEY_RESERVED == key_code)
