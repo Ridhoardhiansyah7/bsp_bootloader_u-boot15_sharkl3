@@ -283,12 +283,11 @@ boot_mode_enum_type  get_mode_from_keypad(void)
 	uint32_t key_code = 0;
 	volatile int i;
 	if (boot_pwr_check() >= PWR_KEY_DETECT_CNT) {
-		//mdelay(50);
-		for (i = 0; i < 80; i++) {
+		mdelay(50);
+		for (i = 0; i < 10; i++) {
 			key_code = board_key_scan();
 			if(key_code != KEY_RESERVED)
 			  break;
-			mdelay(10);
 		}
 		key_mode = check_key_boot(key_code);
 		debugf("cboot:get mode from keypad:0x%x\n",key_code);
