@@ -17,32 +17,39 @@ void board_keypad_init(void)
 	return;
 }
 
-
 unsigned char board_key_scan(void)
 {
 	uint32_t key_code = KEY_RESERVED;
 	int gpio_volumeup = -1;
 	int gpio_volumedown = -1;
 
-
 	sprd_eic_request(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
 	udelay(3000);
+
 	gpio_volumeup = sprd_eic_get(EIC_KEY2_7S_RST_EXT_RSTN_ACTIVE);
-	debugf("gpio_volumeup = %d\n",gpio_volumeup);
-	if(gpio_volumeup < 0)
-		errorf("[eic keys] volumeup : sprd_eic_get return ERROR!\n");
-	if(gpio_volumeup > 0) {
-		key_code = KEY_VOLUMEUP;
-		debugf("[eic keys] volumeup pressed!\n");
-	 }
+	debugf("gpio_volumeup = %d\n", gpio_volumeup);
 
 	gpio_volumedown = sprd_gpio_get(NULL, SPRD_VOLUMEDOWN_GPIO);
-		debugf("gpio_volumedown = %d\n",gpio_volumedown);
-	if(gpio_volumedown < 0)
-		errorf("[eic keys] volumedown : sprd_eic_get return ERROR!\n");
-	if(gpio_volumedown == 0) {
+	debugf("gpio_volumedown = %d\n", gpio_volumedown);
+
+	/*  Volume Up + Volume Down */
+	if (gpio_volumeup > 0 && gpio_volumedown == 0) {
+		debugf("[Custom keys] volumeup + volumedown pressed!\n");
+		return KEY_VOLUMEDOWN;
+	}
+
+	/* Volume Up */
+	if (gpio_volumeup > 0) {
+		key_code = KEY_VOLUMEUP;
+		debugf("[eic keys] volumeup pressed!\n");
+		return key_code;
+	}
+
+	/* Volume Down */
+	if (gpio_volumedown == 0) {
 		key_code = KEY_VOLUMEDOWN;
-		debugf("[eic keys] volumedown pressed!\n");
+		debugf("[gpio keys] volumedown pressed!\n");
+		return key_code;
 	}
 
 	if (KEY_RESERVED == key_code)
@@ -56,9 +63,9 @@ unsigned int check_key_boot(unsigned char key)
 	/*if (KEY_VOLUMEUP == key)
 		return CMD_FACTORYTEST_MODE;*/
 	if(KEY_VOLUMEUP == key)
-		return CMD_FASTBOOT_MODE;
-	else if(KEY_VOLUMEDOWN == key)
 		return CMD_RECOVERY_MODE;
+	else if(KEY_VOLUMEDOWN == key)
+		return CMD_FASTBOOT_MODE;
 	else
 		return 0;
 }
