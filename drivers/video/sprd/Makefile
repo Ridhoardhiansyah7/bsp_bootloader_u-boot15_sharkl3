@@ -6,6 +6,7 @@ obj-$(CONFIG_ROUND_CORNER_SUPPORT) += sprd_round_corner.o
 obj-y += dispc/
 obj-y += dsi/
 obj-y += dphy/
+obj-y += lcd/
 obj-y += panel-if/
 
 obj-$(CONFIG_SOC_SHARKLE) += sharkle/
