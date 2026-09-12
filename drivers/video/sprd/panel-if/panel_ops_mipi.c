@@ -217,6 +217,15 @@ static int panel_init(void)
 
 	mipi_dsi_lp_cmd_enable(dsi, true);
 
+	/*
+	 * Re-arm auto clock-lane control now that the controller is powered
+	 * and LP command mode is enabled — the arm done from mipi_dsi_init()
+	 * happens while dsi power_en is still gated. Mirrors the kernel
+	 * cold-init fix ordering (LP cmd enable -> clklane arm -> init cmds,
+	 * linux commit 6cf23bd6bd3b) for the "tx cmd fifo is not empty" wall.
+	 */
+	dsi_hal_nc_clk_en(dsi, true);
+
 	mipi_dsi_send_cmds(dsi, info->cmds[CMD_CODE_INIT], info->cmds_len[CMD_CODE_INIT]);
 
 	if (info->work_mode == SPRD_MIPI_MODE_CMD)
@@ -328,6 +337,10 @@ static int panel_readid(void)
 	}
 
 	if (!id->reg_items) {
+		if (info->lcd_no_id) {
+			pr_info("No LCD ID registers configured; skipping probe because sprd,lcd-no-id is set\n");
+			return 0;
+		}
 		pr_err("There is no lcd-id-register config!\n");
 		return -1;
 	}
@@ -460,6 +473,14 @@ static int panel_power(int on)
 		if (io->gpio_id) {
 			sprd_gpio_request(NULL, io->gpio_id);
 			sprd_gpio_direction_input(NULL, io->gpio_id);
+		}
+
+		if (io->gpio_tp_reset) {
+			sprd_gpio_request(NULL, io->gpio_tp_reset);
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 0);
+			mdelay(10);
+			sprd_gpio_direction_output(NULL, io->gpio_tp_reset, 1);
+			mdelay(20);
 		}
 
 		sprd_gpio_request(NULL, io->gpio_reset);

@@ -467,6 +467,10 @@ static int of_parse_panel(const void *fdt, int offset, struct panel_info *info)
 	else
 		pr_err("Can't get sprd,lcd-id-tokernel\n");
 
+	str = fdt_getprop(fdt, offset, "sprd,lcd-no-id", &len);
+	if (str)
+		info->lcd_no_id = true;
+
 	/*------Bias Power-------*/
 	ret = fdt_getprop_u32(fdt, offset, "sprd,power-i2c-bus", &val);
 	if (!ret) {
@@ -599,6 +603,12 @@ static int of_parse_panel_power(const void *fdt, int offset, struct panel_info *
 	else
 		pr_err("There is no sprd,gpio-reset\n");
 
+	ret = fdt_getprop_u32(fdt, offset, "sprd,tp-reset-gpio", &val);
+	if (!ret) 
+		info->power_pin.gpio_tp_reset = val;
+	else
+		pr_err("There is no sprd,tp-reset-gpio", &val);
+	
 	return  0;
 }
 

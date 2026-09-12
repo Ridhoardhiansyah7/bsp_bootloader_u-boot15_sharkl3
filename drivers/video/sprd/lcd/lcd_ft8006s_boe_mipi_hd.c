@@ -198,16 +198,7 @@ static int32_t lcm_same_ic_adc_getvalue(unsigned int adc_channel)
 
 static int ft8006s_readid(void)
 {
-	uint32_t lcd_id_vol_raw_data, id_adc;
-	uint8_t adc_channel = 6;
-
-	lcd_id_vol_raw_data = lcm_same_ic_adc_getvalue(adc_channel);
-	id_adc = sprd_chan_small_adc_to_vol(adc_channel, ADC_SCALE_1V2, 0, lcd_id_vol_raw_data);
-	pr_info("LCD id_adc = %dmV\n", id_adc);
-	if ((id_adc > (927 -50 )) & (id_adc < (927 + 50)))
-		return 0;
-	else
-		return -1;
+	return 0;
 }
 
 static int ft8006s_power(int on)
@@ -215,21 +206,6 @@ static int ft8006s_power(int on)
 	uint8_t val =0;
 
 	if (on) {
-		/*	hmct add for avdd/avee */
-		i2c_set_bus_num(3);
-		i2c_init(I2C_SPEED, LCD_POWER_I2C_ADDRESS);
-
-		pr_info("FT8615 panel: set lcd power on +5.8/-5.8 ...\n");
-		i2c_reg_write(LCD_POWER_I2C_ADDRESS, LCD_POWER_VPOS_ADDRESS, 0x12);
-		val = i2c_reg_read(LCD_POWER_I2C_ADDRESS, LCD_POWER_VPOS_ADDRESS);
-		mdelay(5);
-		i2c_reg_write(LCD_POWER_I2C_ADDRESS, LCD_POWER_VNEG_ADDRESS, 0x12);
-		val = i2c_reg_read(LCD_POWER_I2C_ADDRESS, LCD_POWER_VNEG_ADDRESS);
-
-		sprd_gpio_request(NULL, CONFIG_LCM_GPIO_RSTN);
-		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_RSTN, 0);
-		sprd_gpio_request(NULL, CONFIG_CTP_GPIO_RSTN);
-		sprd_gpio_direction_output(NULL, CONFIG_CTP_GPIO_RSTN, 0);
 
 #ifdef CONFIG_LCM_GPIO_AVDDEN
 		sprd_gpio_request(NULL, CONFIG_LCM_GPIO_AVDDEN);
@@ -241,6 +217,19 @@ static int ft8006s_power(int on)
 		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_AVEEEN, 1);
 		mdelay(3);
 #endif
+#ifdef CONFIG_LCM_GPIO_1V8_EN
+		sprd_gpio_request(NULL, CONFIG_LCM_GPIO_1V8_EN);
+		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_1V8_EN, 1);
+		mdelay(20);
+#endif
+		sprd_gpio_request(NULL, CONFIG_LCM_GPIO_RSTN);
+		sprd_gpio_request(NULL, CONFIG_CTP_GPIO_RSTN);
+
+		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_RSTN, 1);
+		mdelay(5);
+		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_RSTN, 0);
+		sprd_gpio_direction_output(NULL, CONFIG_CTP_GPIO_RSTN, 0);
+		mdelay(5);
 		sprd_gpio_direction_output(NULL, CONFIG_CTP_GPIO_RSTN, 1);
 		sprd_gpio_direction_output(NULL, CONFIG_LCM_GPIO_RSTN, 1);
 		mdelay(60);
@@ -290,7 +279,7 @@ static struct panel_ops ft8006s_ops = {
 	.init = ft8006s_init,
 	.read_id = ft8006s_readid,
 	.power = ft8006s_power,
-	.set_brightness= ft8006s_set_brightness
+	//.set_brightness= ft8006s_set_brightness
 };
 
 static struct panel_info ft8006s_info = {
@@ -305,12 +294,12 @@ static struct panel_info ft8006s_info = {
 	/* DPI specific parameters */
 	.pixel_clk = 96000000, /*Hz*/
 	.rgb_timing = {
-		.hfp = 72,
-		.hbp = 72,
+		.hfp = 80,
+		.hbp = 60,
 		.hsync = 16,
-		.vfp = 132,
-		.vbp = 108,
-		.vsync = 4,
+		.vfp = 130,
+		.vbp = 106,
+		.vsync = 8,
 	},
 
 	/* MIPI DSI specific parameters */
@@ -321,7 +310,7 @@ static struct panel_info ft8006s_info = {
 	.nc_clk_en = false,
 };
 
-struct panel_driver ft8006s_boe_mipi_hd_driver = {
+struct panel_driver ft8006s_huaxian_driver = {
 	.info = &ft8006s_info,
 	.ops = &ft8006s_ops,
 };

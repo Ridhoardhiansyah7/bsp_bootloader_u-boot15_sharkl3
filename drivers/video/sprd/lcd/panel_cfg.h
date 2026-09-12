@@ -59,7 +59,7 @@ static struct panel_cfg supported_panel[] = {
 #endif
 #ifdef CONFIG_LCD_FT8006S_BOE_MIPI_HD
 	{
-		.lcd_id = 0x8311,
+		.lcd_id = 0x8006,
 		.drv = &ft8006s_boe_mipi_hd_driver,
 	},
 #endif
