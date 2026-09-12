@@ -337,10 +337,6 @@ static int panel_readid(void)
 	}
 
 	if (!id->reg_items) {
-		if (info->lcd_no_id) {
-			pr_info("No LCD ID registers configured; skipping probe because sprd,lcd-no-id is set\n");
-			return 0;
-		}
 		pr_err("There is no lcd-id-register config!\n");
 		return -1;
 	}
